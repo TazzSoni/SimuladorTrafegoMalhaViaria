@@ -14,7 +14,7 @@ Atividade desenvolvida para a disciplina de Desenvolvimento de Sistemas Paralelo
 
 ## [Equipe](#equipe)
  - [**Rodrigo Souza Tassoni**](mailto:tazzsoni@gmail.com) - [GitHub](https://github.com/tazzsoni)
- - [**Samuel**](mailto:) - [GitHub](https://github.com)
+ - [**Samuel Koepsel**](mailto:sjoepsel@hotmail.com.br) - [GitHub](https://github.com/samuelkoepsel1)
  
 ## [Atividade](#atividade)
 
