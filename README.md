@@ -9,7 +9,6 @@ Atividade desenvolvida para a disciplina de Desenvolvimento de Sistemas Paralelo
 
 # Sumário
 * [Equipe](#equipe)
-* [Atividade](#atividade)
 * [Resultados](#resultados)
 
 ## [Equipe](#equipe)
