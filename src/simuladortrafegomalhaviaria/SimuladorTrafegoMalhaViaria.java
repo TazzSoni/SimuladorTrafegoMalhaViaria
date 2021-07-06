@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package simuladortraficomalhaviaria;
+package simuladortrafegomalhaviaria;
 
 /**
  *
  * @author Rodrigo
  */
-public class SimuladorTraficoMalhaViaria {
+public class SimuladorTrafegoMalhaViaria {
 
     /**
      * @param args the command line arguments
