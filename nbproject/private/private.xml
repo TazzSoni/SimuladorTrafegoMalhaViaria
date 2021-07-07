@@ -4,7 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Repositorios/SimuladorTrafegoMalhaViaria/src/View/Tabela.java</file>
-            <file>file:/C:/Repositorios/SimuladorTrafegoMalhaViaria/src/simuladortrafegomalhaviaria/SimuladorTrafegoMalhaViaria.java</file>
+            <file>file:/C:/Repositorios/SimuladorTrafegoMalhaViaria/src/Malhas/malha-exemplo-1.txt</file>
+            <file>file:/C:/Repositorios/SimuladorTrafegoMalhaViaria/src/Controller/Observer/Observer.java</file>
+            <file>file:/C:/Repositorios/SimuladorTrafegoMalhaViaria/src/Controller/EnterOutCellCheck.java</file>
         </group>
     </open-files>
 </project-private>

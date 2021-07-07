@@ -150,12 +150,15 @@ public class Tabela extends JFrame implements Observer{
         menu.add(timer);
 //        menu.add(lbNumCarros);
         menu.add(lbCount);
+        
+        //chamada apenas para verificar e imprimir as coordenadas das entradas e saídas
         EnterOutCellCheck ver = new EnterOutCellCheck(matrix, rows, cols);
         System.out.println(ver.toString());
         
 
     }
 
+    //início de implementação de observer, que vai cuidar do status dos botões(ativos ou não)
     @Override
     public void setOnOffStartButton(boolean pos) {
         this.btStart.setEnabled(pos);
