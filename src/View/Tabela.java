@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package View;
 
+import Controller.EnterOutCellCheck;
+import Controller.Observer.Observer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -27,12 +24,12 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.WindowConstants;
 import javax.swing.table.TableCellRenderer;
 
-/**
- *
- * @author Rodrigo
- */
-public class Tabela extends JFrame {
+public class Tabela extends JFrame implements Observer{
 
+    int rows;
+    int cols;
+    
+    Scanner fileInput;
     JTable table;
     Container menu;
     JButton btStart;
@@ -52,6 +49,8 @@ public class Tabela extends JFrame {
     JComboBox<String> select;
 
     public Tabela() throws FileNotFoundException {
+        fileInput = new Scanner(new File("src/malhas/malha-exemplo-1.txt"));
+
         iniComponents();
         this.add(menu, BorderLayout.NORTH);
         this.add(table, BorderLayout.CENTER);
@@ -60,19 +59,34 @@ public class Tabela extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+        this.setExtendedState(MAXIMIZED_BOTH);
     }
 
     private void iniComponents() throws FileNotFoundException {
 
         menu = new Container();
         btStart = new JButton("Start");
+        btStart.addActionListener((ActionEvent e) -> {
+//            String value = numeroVeiculos.getValue() + "";
+//            String timeOut = timer.getValue() + "";
+//            int cars = Integer.parseInt(value);
+//            int timeOutValue = Integer.parseInt(timeOut);
+//            carsThreadController.setQtdCarros(cars);
+//            carsThreadController.setTimer(timeOutValue);
+//            carsThreadController.start();
+        });
+        btStart.setEnabled(false);
         btStop = new JButton("Stop");
+        btStop.addActionListener((ActionEvent e) -> {
+//            controller.stop();
+        });
+        btStop.setEnabled(false);
 
         select = new JComboBox(vector);
-//        select.addActionListener((ActionEvent e) -> {
-//            String resultado = (String) select.getSelectedItem();
+        select.addActionListener((ActionEvent e) -> {
+            String resultado = (String) select.getSelectedItem();
 //            controller.changeThreadMethodType(resultado);
-//        });
+        });
 
         lbVeiculos = new JLabel("Numero de veículos: ");
         lbMetodo = new JLabel("Método: ");
@@ -86,17 +100,16 @@ public class Tabela extends JFrame {
 
         menu.setLayout(new FlowLayout());
 
-        Scanner fileInput = new Scanner(new File("src/malhas/malha-exemplo-3.txt"));
-        int n1 = fileInput.nextInt();
-        int n2 = fileInput.nextInt();
-        Integer[][] matrix = new Integer[n1][n2];
+         rows = fileInput.nextInt();
+         cols = fileInput.nextInt();
+        Integer[][] matrix = new Integer[rows][cols];
 
-        for (int i = 0; i < n1; i++) {
-            for (int j = 0; j < n2; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 matrix[i][j] = fileInput.nextInt();
             }
         }
-        Integer[] cabecario = new Integer[n2];
+        Integer[] cabecario = new Integer[cols];
         for (int i = 0; i < cabecario.length; i++) {
             cabecario[i] = i;
         }
@@ -137,6 +150,21 @@ public class Tabela extends JFrame {
         menu.add(timer);
 //        menu.add(lbNumCarros);
         menu.add(lbCount);
+        EnterOutCellCheck ver = new EnterOutCellCheck(matrix, rows, cols);
+        System.out.println(ver.toString());
+        
 
     }
+
+    @Override
+    public void setOnOffStartButton(boolean pos) {
+        this.btStart.setEnabled(pos);
+    }
+
+    @Override
+    public void setOnOffStopButton(boolean pos) {
+        this.btStop.setEnabled(pos);
+    }
+
+   
 }
