@@ -1,6 +1,7 @@
 package View;
 
 import Controller.Observer.Observer;
+import Controller.TelaController;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ImageIcon;
@@ -16,12 +17,12 @@ public class Tabela extends JPanel implements Observer {
 
         @Override
         public int getRowCount() {
-            return cont.getMatrixManager().getRows();
+            return cont.getMatrizUtils().getRows();
         }
 
         @Override
         public int getColumnCount() {
-            return cont.getMatrixManager().getCols();
+            return cont.getMatrizUtils().getCols();
         }
 
         @Override
@@ -46,7 +47,7 @@ public class Tabela extends JPanel implements Observer {
         }
     }
 
-    private Controller cont;
+    private TelaController cont;
 
     private TableModel tableModel;
     private JTable table;

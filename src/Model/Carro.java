@@ -47,7 +47,7 @@ public class Carro extends Thread {
         }
 
         cell.reset();
-        telaController.notifyUpdate();
+        telaController.notificarPosicaoCarros();
     }
 
     //O verifica cruzamento é uma região crítica. Não pode acontecer de o carro ver o espaço vazio à sua frente,
@@ -85,7 +85,7 @@ public class Carro extends Thread {
             cell = getNextCell(cell);
         }
 
-        System.out.println(telaController.getThreadMethodType());
+        System.out.println(telaController.getTipoThread());
         checkPathAndMove(pathToAllExits, intersectionExits);
     }
 

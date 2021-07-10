@@ -13,24 +13,24 @@ import javax.swing.ImageIcon;
 import Model.AbstractFactory.AbstractCell;
 import Model.Carro;
 import Model.MoveType;
-import utils.MatrixManager;
 import Model.Estrada;
+import Utils.MatrizUtils;
 
-public class TelaController implements Controller {
+public class TelaController {
 
     private static TelaController instance;
-    private final MatrixManager matrixManager = MatrixManager.getInstance();
+    private final MatrizUtils matrizUtils = MatrizUtils.getInstance();
     private List<Carro> carros = new ArrayList();
-    private AbstractCell[][] cells;
+    private AbstractCell[][] celulas;
     private List<Observer> observers = new ArrayList();
-    private String threadMethodType;
+    private String tipoThread;
     private final String filename = "malhas/malha-exemplo-3.txt";
     private boolean stopped = false;
 
     private TelaController() {
         try {
-            this.matrixManager.print(filename);
-            this.matrixManager.loadEntriesAndExits();
+            this.matrizUtils.print(filename);
+            this.matrizUtils.loadEntriesAndExits();
         } catch (IOException var2) {
             var2.printStackTrace();
         }
@@ -54,68 +54,47 @@ public class TelaController implements Controller {
         this.observers.remove(obs);
     }
 
-    public void changeThreadMethodType(String opt) {
-        this.threadMethodType = opt;
-        try {
-            matrixManager.changeMethodType(filename, threadMethodType);
-        } catch (IOException ex){
-            ex.printStackTrace();
-        }
-        notifyStartButton(true);
-    }
-
-    public String getThreadMethodType(){
-        return threadMethodType;
-    }
-
     public void start() {
-        notifyStartButton(false);
-        notifyEndButton(true);
+        notificarStartButton(false);
+        notificarEndButton(true);
         Carro newCarro = new Carro(this);
 
         Integer[] pos = getFirstCell();
         newCarro.setFirstPosition(pos[0], pos[1]);
 
         this.carros.add(newCarro);
-        notifyCounter();
+        notificarQtdCarros();
         this.updateRoadView(newCarro);
         newCarro.start();
     }
 
-    @Override
     public void stop() {
         this.stopped = true;
-        notifyStartButton(true);
-        notifyEndButton(false);
+        notificarStartButton(true);
+        notificarEndButton(false);
     }
 
-    public MatrixManager getMatrixManager() {
-        return this.matrixManager;
-    }
-
-    private void initRoadCells() {
-        this.cells = matrixManager.getMatriz();
-        List<Integer> stopCells = BaseRoad.getStopCells();
-
-        int row = this.matrixManager.getRows();
-        int col = this.matrixManager.getCols();
-
-        for (int i = 0; i < row; ++i) {
-            for (int j = 0; j < col; ++j) {
-                if (setLastCell(new Integer[]{i, j})) {
-                    this.cells[i][j].setLastCell(true);
-                }
-
-                if (stopCells.contains(cells[i][j].getMoveType())) {
-                    cells[i][j].setStopCell(true);
-                }
-            }
+    public void changeThreadMethodType(String opt) {
+        this.tipoThread = opt;
+        try {
+            matrizUtils.changeMethodType(filename, tipoThread);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+        notificarStartButton(true);
+    }
+
+    public String getTipoThread() {
+        return tipoThread;
+    }
+
+    public MatrizUtils getMatrizUtils() {
+        return this.matrizUtils;
     }
 
     private boolean setLastCell(Integer[] array) {
-        for (Integer[] aValue :
-                this.matrixManager.getExits()) {
+        for (Integer[] aValue
+                : this.matrizUtils.getExits()) {
             if (Arrays.equals(aValue, array)) {
                 return true;
             }
@@ -123,73 +102,92 @@ public class TelaController implements Controller {
         return false;
     }
 
-    public void setStopped(boolean status){
+    private void initRoadCells() {
+        this.celulas = matrizUtils.getMatriz();
+        List<Integer> stopCells = Estrada.getStopCells();
+
+        int row = this.matrizUtils.getRows();
+        int col = this.matrizUtils.getCols();
+
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < col; ++j) {
+                if (setLastCell(new Integer[]{i, j})) {
+                    this.celulas[i][j].setLastCell(true);
+                }
+
+                if (stopCells.contains(celulas[i][j].getMoveType())) {
+                    celulas[i][j].setStopCell(true);
+                }
+            }
+        }
+    }
+
+    public void setStopped(boolean status) {
         this.stopped = status;
     }
 
-    public boolean isStopped(){
+    public boolean isStopped() {
         return stopped;
     }
 
-    public void updateCarroContador(Carro c){
-        this.carros.remove(c);
-        notifyCounter();
+    public Icon renderCell(int row, int col) {
+        return this.celulas[row][col].getIcon();
     }
 
-    public Icon renderCell(int row, int col) {
-        return this.cells[row][col].getIcon();
+    public void updateCarroContador(Carro c) {
+        this.carros.remove(c);
+        notificarQtdCarros();
     }
 
     private Integer[] getFirstCell() {
-        Collections.shuffle(this.matrixManager.getEntries());
-        return this.matrixManager.getEntries().get(0);
-    }
-
-    public int getCars(){
-        return this.carros.size();
+        Collections.shuffle(this.matrizUtils.getEntries());
+        return this.matrizUtils.getEntries().get(0);
     }
 
     public void updateRoadView(Carro c) {
         int i = c.getRow();
         int j = c.getColumn();
 
-        int moveType = this.matrixManager.getValueAtPosition(i, j);
-        if(moveType >= 5){
-            this.cells[i][j].setIcon(new ImageIcon(MoveType.convertMoveType(moveType)));
-        }else {
-            this.cells[i][j].setIcon(new ImageIcon(MoveType.getMoveType(moveType)));
+        int moveType = this.matrizUtils.getValueAtPosition(i, j);
+        if (moveType >= 5) {
+            this.celulas[i][j].setIcon(new ImageIcon(MoveType.convertMoveType(moveType)));
+        } else {
+            this.celulas[i][j].setIcon(new ImageIcon(MoveType.getMoveType(moveType)));
         }
 
-        notifyUpdate();
+        notificarPosicaoCarros();
     }
 
-    public void notifyUpdate() {
-        for (Observer observer : observers) {
-            observer.updateCarroPosicao();
-        }
-    }
-
-    public void notifyStartButton(boolean status) {
-        for (Observer observer : observers) {
-            observer.changeStartButtonStatus(status);
-        }
-    }
-
-    public void notifyEndButton(boolean status) {
-        for (Observer observer : observers) {
-            observer.changeEndButtonStatus(status);
-        }
-    }
-
-    public void notifyCounter(){
-        for (Observer observer : observers) {
-            observer.changeCounter(this.getCars());
-        }
+    public int getCarros() {
+        return this.carros.size();
     }
 
     public AbstractCell getCellAtPosition(int row, int col) {
-        return cells[row][col];
+        return celulas[row][col];
     }
-}
 
- 
+    public void notificarPosicaoCarros() {
+        for (Observer observer : observers) {
+            observer.atualizaPosicaoCarros();
+        }
+    }
+
+    public void notificarStartButton(boolean status) {
+        for (Observer observer : observers) {
+            observer.setOnOffStartButton(status);
+        }
+    }
+
+    public void notificarEndButton(boolean status) {
+        for (Observer observer : observers) {
+            observer.setOnOffStopButton(status);
+        }
+    }
+
+    public void notificarQtdCarros() {
+        for (Observer observer : observers) {
+            observer.qtdCarros(this.getCarros());
+        }
+    }
+
+}
