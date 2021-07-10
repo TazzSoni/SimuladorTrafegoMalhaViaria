@@ -12,8 +12,8 @@ import javax.swing.ImageIcon;
 
 import Model.AbstractFactory.AbstractCell;
 import Model.Carro;
-import Model.MoveType;
 import Model.Estrada;
+import Model.TipoMovimento;
 import Utils.MatrizUtils;
 
 public class TelaController {
@@ -115,7 +115,7 @@ public class TelaController {
                     this.celulas[i][j].setLastCell(true);
                 }
 
-                if (stopCells.contains(celulas[i][j].getMoveType())) {
+                if (stopCells.contains(celulas[i][j].getTipoMovimento())) {
                     celulas[i][j].setStopCell(true);
                 }
             }
@@ -148,11 +148,11 @@ public class TelaController {
         int i = c.getRow();
         int j = c.getColumn();
 
-        int moveType = this.matrizUtils.getValueAtPosition(i, j);
-        if (moveType >= 5) {
-            this.celulas[i][j].setIcon(new ImageIcon(MoveType.convertMoveType(moveType)));
+        int tipoMovimento = this.matrizUtils.getValueAtPosition(i, j);
+        if (tipoMovimento >= 5) {
+            this.celulas[i][j].setIcon(new ImageIcon(TipoMovimento.converteTipoMovimento(tipoMovimento)));
         } else {
-            this.celulas[i][j].setIcon(new ImageIcon(MoveType.getMoveType(moveType)));
+            this.celulas[i][j].setIcon(new ImageIcon(TipoMovimento.getTipoMovimento(tipoMovimento)));
         }
 
         notificarPosicaoCarros();
