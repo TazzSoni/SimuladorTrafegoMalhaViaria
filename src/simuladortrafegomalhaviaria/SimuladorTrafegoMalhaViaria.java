@@ -4,6 +4,7 @@ import View.Tabela;
 import java.awt.EventQueue;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import view.Tela;
 
 public class SimuladorTrafegoMalhaViaria {
 
