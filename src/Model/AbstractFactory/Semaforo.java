@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Semaforo extends AbstractCell {
 
-    Semaforo mutex = new Semaforo(1);
+    Semaphore mutex = new Semaphore(1);
 
     public Semaforo(int moveType, int row, int column) {
         this.stopCell = false;
@@ -20,7 +20,7 @@ public class Semaforo extends AbstractCell {
         this.icon = new ImageIcon(Estrada.getRoadType(moveType));
     }
 
-    public int getMoveType() {
+    public int getTipoMovimento() {
         return tipoMovimento;
     }
 
@@ -28,7 +28,7 @@ public class Semaforo extends AbstractCell {
         return carro;
     }
 
-    public boolean setCarToIntersection(Carro c) {
+    public boolean setCarroInterseccao(Carro c) {
         try {
             if (mutex.tryAcquire(c.getSpeed(), TimeUnit.MILLISECONDS)) {
                 this.carro = c;
@@ -50,7 +50,7 @@ public class Semaforo extends AbstractCell {
     }
 
     public void reset() {
-        this.setIcon(new ImageIcon(Estrada.getRoadType(moveType)));
+        this.setIcon(new ImageIcon(Estrada.getRoadType(tipoMovimento)));
         this.carro = null;
         mutex.release();
     }
