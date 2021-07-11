@@ -30,7 +30,7 @@ public class TelaController {
     private TelaController() {
         try {
             this.matrixManager.print(filename);
-            this.matrixManager.loadEntriesAndExits();
+            this.matrixManager.loadEntradasSaidas();
         } catch (IOException var2) {
             var2.printStackTrace();
         }
@@ -114,7 +114,7 @@ public class TelaController {
 
     private boolean setLastCell(Integer[] array) {
         for (Integer[] aValue :
-                this.matrixManager.getExits()) {
+                this.matrixManager.getSaidas()) {
             if (Arrays.equals(aValue, array)) {
                 return true;
             }
@@ -140,8 +140,8 @@ public class TelaController {
     }
 
     private Integer[] getFirstCell() {
-        Collections.shuffle(this.matrixManager.getEntries());
-        return this.matrixManager.getEntries().get(0);
+        Collections.shuffle(this.matrixManager.getEntradas());
+        return this.matrixManager.getEntradas().get(0);
     }
 
     public int getCars(){

@@ -6,18 +6,18 @@ public class CarrosUtils extends Thread {
 
     TelaController telaController = TelaController.getInstance();
     private int qtdCarros;
-    private int timer;
+    private int tempo;
 
     public void setQtdCarros(int qtdCarros) {
         this.qtdCarros = qtdCarros;
     }
 
-    public void setTimer(int timer) {
-        this.timer = timer;
+    public void setTempo(int timer) {
+        this.tempo = timer;
     }
 
-    public int getTimer() {
-        return timer * 1000;
+    public int getTempo() {
+        return tempo * 1000;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class CarrosUtils extends Thread {
             }
             telaController.start();
             try {
-                Thread.currentThread().sleep(getTimer());
+                Thread.currentThread().sleep(getTempo());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

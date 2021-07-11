@@ -50,7 +50,7 @@ public class Tela extends JFrame implements Observer {
             int cars = Integer.parseInt(value);
             int timeOutValue = Integer.parseInt(timeOut);
             carsThreadController.setQtdCarros(cars);
-            carsThreadController.setTimer(timeOutValue);
+            carsThreadController.setTempo(timeOutValue);
             carsThreadController.start();
         });
         btnStart.setEnabled(false);
