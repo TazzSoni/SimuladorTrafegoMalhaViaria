@@ -1,8 +1,7 @@
 package Model.AbstractFactory;
 
-import Model.AbstractFactory.AbstractCell;
-import Model.Carro;
 import Model.Estrada;
+import Model.Carro;
 
 import javax.swing.*;
 import java.util.concurrent.TimeUnit;
@@ -13,24 +12,24 @@ public class Monitor extends AbstractCell {
 
     private final Lock lockCell = new ReentrantLock();
 
-    public Monitor(int tipoMovimento, int row, int column) {
+    public Monitor(int moveType, int row, int column) {
         this.stopCell = false;
         this.lastCell = false;
         this.row = row;
         this.column = column;
-        this.tipoMovimento = tipoMovimento;
-        this.icon = new ImageIcon(Estrada.getRoadType(tipoMovimento));
+        this.moveType = moveType;
+        this.icon = new ImageIcon(Estrada.getRoadType(moveType));
     }
 
-    public int getTipoMovimento() {
-        return tipoMovimento;
+    public int getMoveType() {
+        return moveType;
     }
 
-    public Carro getCarro() {
+    public Carro getCar() {
         return carro;
     }
 
-    public boolean setCarroInterseccao(Carro c) {
+    public boolean setCarToIntersection(Carro c) {
         try {
             if (lockCell.tryLock(c.getSpeed(), TimeUnit.MILLISECONDS)) {
                 this.carro = c;
@@ -42,13 +41,13 @@ public class Monitor extends AbstractCell {
         }
     }
 
-    public void setCarro(Carro c) {
+    public void setCar(Carro c) {
         lockCell.lock();
         this.carro = c;
     }
 
     public void reset() {
-        this.setIcon(new ImageIcon(Estrada.getRoadType(tipoMovimento)));
+        this.setIcon(new ImageIcon(Estrada.getRoadType(moveType)));
         this.carro = null;
         lockCell.unlock();
     }

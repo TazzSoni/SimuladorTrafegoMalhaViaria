@@ -16,19 +16,19 @@ public class Semaforo extends AbstractCell {
         this.lastCell = false;
         this.row = row;
         this.column = column;
-        this.tipoMovimento = moveType;
+        this.moveType = moveType;
         this.icon = new ImageIcon(Estrada.getRoadType(moveType));
     }
 
-    public int getTipoMovimento() {
-        return tipoMovimento;
+    public int getMoveType() {
+        return moveType;
     }
 
-    public Carro getCarro() {
+    public Carro getCar() {
         return carro;
     }
 
-    public boolean setCarroInterseccao(Carro c) {
+    public boolean setCarToIntersection(Carro c) {
         try {
             if (mutex.tryAcquire(c.getSpeed(), TimeUnit.MILLISECONDS)) {
                 this.carro = c;
@@ -40,7 +40,7 @@ public class Semaforo extends AbstractCell {
         }
     }
 
-    public void setCarro(Carro c) {
+    public void setCar(Carro c) {
         try {
             mutex.acquire();
             this.carro = c;
@@ -50,7 +50,7 @@ public class Semaforo extends AbstractCell {
     }
 
     public void reset() {
-        this.setIcon(new ImageIcon(Estrada.getRoadType(tipoMovimento)));
+        this.setIcon(new ImageIcon(Estrada.getRoadType(moveType)));
         this.carro = null;
         mutex.release();
     }

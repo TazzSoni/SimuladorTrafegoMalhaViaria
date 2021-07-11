@@ -6,10 +6,10 @@ import java.util.List;
 public enum Estrada {
 
     ZERO(0,"img/background.png"),
-    ONE(1,"img/setacima.png"),
-    TWO(2,"img/setadir.png"),
-    THREE(3,"img/setabaixo.png"), 
-    FOUR(4,"img/setaesq.png"),
+    ONE(1,"img/setaC.png"),
+    TWO(2,"img/setaD.png"),
+    THREE(3,"img/setaB.png"), 
+    FOUR(4,"img/setaE.png"),
     FIVE(5,"img/cruzamento.png"),
     SIX(6,"img/cruzamento.png"),
     SEVEN(7,"img/cruzamento.png"),
@@ -21,11 +21,11 @@ public enum Estrada {
 
 
     private String filePath;
-    private int number;
+    private int numero;
 
     private Estrada(int number, String filePath) {
         this.filePath = filePath;
-        this.number   = number;
+        this.numero   = number;
     }
 
     @Override
@@ -35,7 +35,7 @@ public enum Estrada {
     
    public static String getRoadType(int number) {
       for (Estrada roadType : Estrada.values()) {
-          if (roadType.number == number)
+          if (roadType.numero == number)
               return roadType.toString();
       }
         return null;
@@ -45,9 +45,9 @@ public enum Estrada {
        List<Integer> list = new ArrayList<>();
        for (Estrada type:
             Estrada.values()) {
-           if( (type.number == 5) || (type.number == 6) || (type.number == 7) || (type.number == 8) ||
-                   (type.number == 9) || (type.number == 10) || (type.number == 11) || (type.number == 12) ){
-               list.add(type.number);
+           if( (type.numero == 5) || (type.numero == 6) || (type.numero == 7) || (type.numero == 8) ||
+                   (type.numero == 9) || (type.numero == 10) || (type.numero == 11) || (type.numero == 12) ){
+               list.add(type.numero);
            }
        }
         return list;

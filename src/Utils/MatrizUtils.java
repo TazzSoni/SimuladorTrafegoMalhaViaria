@@ -18,8 +18,8 @@ public class MatrizUtils {
     private final String[] tamanho = new String[2];
     private AbstractCell[][] matriz;
 
-    private static List<Integer[]> entradas = new ArrayList<>();
-    private static List<Integer[]> saidas = new ArrayList<>();
+    private static List<Integer[]> entries = new ArrayList<>();
+    private static List<Integer[]> exits = new ArrayList<>();
 
 
     private MatrizUtils() {
@@ -41,7 +41,7 @@ public class MatrizUtils {
     }
 
     public int getValueAtPosition(int row, int col) {
-        return matriz[row][col].getTipoMovimento();
+        return matriz[row][col].getMoveType();
     }
 
     public void print(String file) throws IOException {
@@ -102,44 +102,44 @@ public class MatrizUtils {
         }
     }
 
-    public void getRowsEntradasSaidas() {
+    public void findRowsEntriesAndExits() {
         for (int i = 0; i < this.getRows() - 1; ++i) {
 
             if (getValueAtPosition(i, 0) == 2) {
-                entradas.add(new Integer[]{i, 0});
+                entries.add(new Integer[]{i, 0});
             } else if (getValueAtPosition(i, 0) == 4) {
-                saidas.add(new Integer[]{i, 0});
+                exits.add(new Integer[]{i, 0});
             }
 
             if (getValueAtPosition(i, this.getCols() - 1) == 4) {
-                entradas.add(new Integer[]{i, this.getCols() - 1});
+                entries.add(new Integer[]{i, this.getCols() - 1});
             } else if (getValueAtPosition(i, this.getCols() - 1) == 2) {
-                saidas.add(new Integer[]{i, this.getCols() - 1});
+                exits.add(new Integer[]{i, this.getCols() - 1});
             }
         }
 
     }
 
-    public void getColumnsEntradasSaidas() {
+    public void findColumnsEntriesAndExits() {
         for (int i = 0; i < this.getCols(); ++i) {
 
             if (getValueAtPosition(0, i) == 3) {
-                entradas.add(new Integer[]{0, i});
+                entries.add(new Integer[]{0, i});
             } else if (getValueAtPosition(0, i) == 1) {
-                saidas.add(new Integer[]{0, i});
+                exits.add(new Integer[]{0, i});
             }
 
             if (getValueAtPosition(this.getRows() - 1, i) == 1) {
-                entradas.add(new Integer[]{this.getRows() - 1, i});
+                entries.add(new Integer[]{this.getRows() - 1, i});
             } else if (getValueAtPosition(this.getRows() - 1, i) == 3) {
-                saidas.add(new Integer[]{this.getRows() - 1, i});
+                exits.add(new Integer[]{this.getRows() - 1, i});
             }
         }
     }
 
     public void loadEntriesAndExits() {
-    	getRowsEntradasSaidas();
-    	getColumnsEntradasSaidas();
+        findRowsEntriesAndExits();
+        findColumnsEntriesAndExits();
     }
 
     public AbstractCell[][] getMatriz() {
@@ -147,10 +147,10 @@ public class MatrizUtils {
     }
 
     public List<Integer[]> getEntries() {
-        return entradas;
+        return entries;
     }
 
     public List<Integer[]> getExits() {
-        return saidas;
+        return exits;
     }
 }

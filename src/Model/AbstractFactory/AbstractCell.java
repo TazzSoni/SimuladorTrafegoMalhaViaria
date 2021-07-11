@@ -13,17 +13,17 @@ public abstract class AbstractCell {
     protected int row;
     protected int column;
 
-    protected int tipoMovimento;
+    protected int moveType;
     protected Icon icon;
     protected Carro carro;
 
-    public abstract int getTipoMovimento();
+    public abstract int getMoveType();
 
-    public abstract Carro getCarro();
+    public abstract Carro getCar();
 
-    public abstract boolean setCarroInterseccao(Carro c);
+    public abstract boolean setCarToIntersection(Carro c);
 
-    public abstract void setCarro(Carro c);
+    public abstract void setCar(Carro c);
 
     public abstract void reset();
 

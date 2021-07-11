@@ -1,12 +1,9 @@
-package Controller.Observer;
+package Controller.Observer; 
 
 public interface Observer {
-
-    public void qtdCarros(int value);
-
-    public void setOnOffStartButton(boolean status);
-
-    public void setOnOffStopButton(boolean status);
-
-    public void atualizaPosicaoCarros();
+    
+    public void updateCarPosition();
+    public void changeStartButtonStatus(boolean status);
+    public void changeEndButtonStatus(boolean status);
+    public void changeCounter(int value);
 }

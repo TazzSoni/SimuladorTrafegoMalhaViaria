@@ -16,8 +16,8 @@ public class Carro extends Thread {
     private boolean outOfRoad = false;
     private final TelaController telaController;
 
-    private AbstractCell celula;
-    private AbstractCell proximaCelula = new Semaforo(0, 0, 0);
+    private AbstractCell cell;
+    private AbstractCell nextCell = new Semaforo(0, 0, 0);
 
     public Carro(TelaController telaController) {
         this.telaController = telaController;
@@ -38,16 +38,16 @@ public class Carro extends Thread {
 
             if (checkLastCell()) {
                 outOfRoad = true;
-                telaController.updateCarroContador(this);
-            } else if (proximaCelula.isStopCell()) {
+                telaController.updateCarCount(this);
+            } else if (nextCell.isStopCell()) {
                 verifyIntersection();
             } else {
                 moveCar();
             }
         }
 
-        celula.reset();
-        telaController.notificarPosicaoCarros();
+        cell.reset();
+        telaController.notifyUpdate();
     }
 
     //O verifica cruzamento é uma região crítica. Não pode acontecer de o carro ver o espaço vazio à sua frente,
@@ -57,14 +57,14 @@ public class Carro extends Thread {
         List<List<AbstractCell>> pathToAllExits = new ArrayList<>();
         List<AbstractCell> currentPathing = new ArrayList<>();
 
-        AbstractCell cell = proximaCelula;
+        AbstractCell cell = nextCell;
 
         // For responsável por passar pelas 4 células do cruzamento
         for (int i = 0; i < 4; i++) {
-            int tipoMovimento = cell.getTipoMovimento();
+            int moveType = cell.getMoveType();
             currentPathing.add(cell);
 
-            switch (tipoMovimento) {
+            switch (moveType) {
                 case 9:
                     intersectionExits.add(telaController.getCellAtPosition(cell.getRow(), cell.getColumn() + 1));
                     pathToAllExits.add(new ArrayList<>(currentPathing));
@@ -85,7 +85,7 @@ public class Carro extends Thread {
             cell = getNextCell(cell);
         }
 
-        System.out.println(telaController.getTipoThread());
+        System.out.println(telaController.getThreadMethodType());
         checkPathAndMove(pathToAllExits, intersectionExits);
     }
 
@@ -100,7 +100,7 @@ public class Carro extends Thread {
             pathToExit.add(intersectionExits.get(chosenExit));
 
             for (AbstractCell c : pathToExit) {
-                if (c.setCarroInterseccao(this)) {
+                if (c.setCarToIntersection(this)) {
                     acquiredCells.add(c);
                 } else {
                     for (AbstractCell acquiredCell : acquiredCells) {
@@ -138,28 +138,28 @@ public class Carro extends Thread {
     }
 
     private boolean checkLastCell() {
-        return celula.isLastCell();
+        return cell.isLastCell();
     }
 
     private void moveCar() {
-        AbstractCell c = getNextCell(celula);
-        c.setCarro(this);
+        AbstractCell c = getNextCell(cell);
+        c.setCar(this);
         this.setColumn(c.getColumn());
         this.setRow(c.getRow());
         if (!c.isLastCell())
-            this.proximaCelula = getNextCell(c);
+            this.nextCell = getNextCell(c);
 
-        celula.reset();
-        celula = c;
+        cell.reset();
+        cell = c;
         refreshView();
     }
 
     private void moveCarToIntersectionExit(AbstractCell c) {
         this.setColumn(c.getColumn());
         this.setRow(c.getRow());
-        this.proximaCelula = getNextCell(c);
-        celula.reset();
-        celula = c;
+        this.nextCell = getNextCell(c);
+        cell.reset();
+        cell = c;
 
         refreshView();
     }
@@ -188,12 +188,12 @@ public class Carro extends Thread {
         return speed;
     }
 
-    public AbstractCell getCelula() {
-        return celula;
+    public AbstractCell getCell() {
+        return cell;
     }
 
-    public void setCelula(AbstractCell celula) {
-        this.celula = celula;
+    public void setCell(AbstractCell cell) {
+        this.cell = cell;
     }
 
     public void setOutOfRoad(boolean outOfRoad) {
@@ -202,8 +202,8 @@ public class Carro extends Thread {
 
     public boolean setFirstPosition(Integer row, Integer col) {
         AbstractCell cell = telaController.getCellAtPosition(row, col);
-        cell.setCarro(this);
-        this.setCelula(cell);
+        cell.setCar(this);
+        this.setCell(cell);
 
         setRow(row);
         setColumn(col);
@@ -212,53 +212,53 @@ public class Carro extends Thread {
 
     // Para este método precisaremos colocar as posições nas célular. Ele retorna a próxima célula em relação a uma célula qualquer,
     // e vai ser usado para mapearmos o cruzamento sem precisar mover o carro..
-    private AbstractCell getNextCell(AbstractCell celula) {
-        int tipoMovimento;
+    private AbstractCell getNextCell(AbstractCell cell) {
+        int moveType;
 
-        if (celula.getTipoMovimento()> 4 && this.celula.getTipoMovimento() <= 8) {
-            tipoMovimento = celula.getTipoMovimento() - 4;
-        } else if (celula.getTipoMovimento() > 8) {
-            switch (celula.getTipoMovimento()) {
+        if (cell.getMoveType() > 4 && cell.getMoveType() <= 8) {
+            moveType = cell.getMoveType() - 4;
+        } else if (cell.getMoveType() > 8) {
+            switch (cell.getMoveType()) {
                 case 9:
-                    tipoMovimento = 1;
+                    moveType = 1;
                     break;
                 case 10:
-                    tipoMovimento = 4;
+                    moveType = 4;
                     break;
                 case 11:
-                    tipoMovimento = 2;
+                    moveType = 2;
                     break;
                 case 12:
-                    tipoMovimento = 3;
+                    moveType = 3;
                     break;
                 default:
-                    tipoMovimento = 0;
+                    moveType = 0;
             }
         } else {
-            tipoMovimento = this.celula.getTipoMovimento();
+            moveType = cell.getMoveType();
         }
 
-        switch (tipoMovimento) {
+        switch (moveType) {
             case 1:
-                this.proximaCelula = telaController.getCellAtPosition(this.celula.getRow() - 1, this.celula.getColumn());
+                this.nextCell = telaController.getCellAtPosition(cell.getRow() - 1, cell.getColumn());
                 break;
             case 2:
-                this.proximaCelula = telaController.getCellAtPosition(this.celula.getRow(), this.celula.getColumn() + 1);
+                this.nextCell = telaController.getCellAtPosition(cell.getRow(), cell.getColumn() + 1);
                 break;
             case 3:
-                this.proximaCelula = telaController.getCellAtPosition(this.celula.getRow() + 1, this.celula.getColumn());
+                this.nextCell = telaController.getCellAtPosition(cell.getRow() + 1, cell.getColumn());
                 break;
             case 4:
-                this.proximaCelula = telaController.getCellAtPosition(this.celula.getRow(), this.celula.getColumn() - 1);
+                this.nextCell = telaController.getCellAtPosition(cell.getRow(), cell.getColumn() - 1);
                 break;
             default:
                 break;
         }
 
-        return proximaCelula;
+        return nextCell;
     }
 
     public void refreshView() {
-    	telaController.updateRoadView(this);
+        telaController.updateRoadView(this);
     }
 }

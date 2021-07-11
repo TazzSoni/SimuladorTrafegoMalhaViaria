@@ -1,64 +1,63 @@
 package View;
 
-import Controller.Observer.Observer;
-import Controller.TelaController;
-import java.awt.Color;
-import java.awt.Component;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import Controller.TelaController;
+import Controller.Observer.Observer;
+
+import java.awt.*;
+
 public class Tabela extends JPanel implements Observer {
 
-    class TableModel extends AbstractTableModel {
+
+    class CellModel extends AbstractTableModel{
 
         @Override
         public int getRowCount() {
-            return cont.getMatrizUtils().getRows();
+            return telaController.getMatrixManager().getRows();
         }
 
         @Override
         public int getColumnCount() {
-            return cont.getMatrizUtils().getCols();
+            return telaController.getMatrixManager().getCols();
         }
 
         @Override
         public Object getValueAt(int row, int col) {
-            return cont.renderCell(row, col);
+            return telaController.renderCell(row, col);
         }
 
     }
 
     class CellRenderer extends DefaultTableCellRenderer {
-
         @Override
         public Component getTableCellRendererComponent(JTable table,
-                Object value,
-                boolean isSelected,
-                boolean hasFocus,
-                int row,
-                int col) {
+                                                       Object value,
+                                                       boolean isSelected,
+                                                       boolean hasFocus,
+                                                       int row,
+                                                       int col) {
             setIcon((ImageIcon) value);
 
             return this;
         }
     }
 
-    private TelaController cont;
+    private TelaController telaController;
 
-    private TableModel tableModel;
-    private JTable table;
+    private CellModel cellModel;
+    private JTable cellTable;
+
 
     public Tabela() {
         super();
 
-        cont = TelaController.getInstance();
-        cont.attach(this);
+        telaController = TelaController.getInstance();
+        telaController.attach(this);
 
-        tableModel = new TableModel();
+        cellModel = new CellModel();
 
         initComponents();
 
@@ -66,35 +65,32 @@ public class Tabela extends JPanel implements Observer {
 
     private void initComponents() {
 
-        table = new JTable();
-        table.setBackground(Color.black);
-        table.setModel(this.tableModel);
-        for (int x = 0; x < table.getColumnModel().getColumnCount(); x++) {
-            table.getColumnModel().getColumn(x).setWidth(35);
-            table.getColumnModel().getColumn(x).setMaxWidth(45);
+        cellTable = new JTable();
+        cellTable.setBackground(Color.white);
+        cellTable.setModel(this.cellModel);
+        for (int x = 0 ; x < cellTable.getColumnModel().getColumnCount(); x++) {
+            cellTable.getColumnModel().getColumn(x).setWidth(35);
+            cellTable.getColumnModel().getColumn(x).setMaxWidth(45);
         }
-        table.setRowHeight(32);
-        table.setShowGrid(false);
+        cellTable.setRowHeight(32);
+        cellTable.setShowGrid(false);
 
-        table.setDefaultRenderer(Object.class, new CellRenderer());
+        cellTable.setDefaultRenderer(Object.class, new CellRenderer());
 
-        add(table);
+        add(cellTable);
     }
 
     @Override
-    public void qtdCarros(int value) {
+    public void updateCarPosition() {
         updateUI();
     }
 
     @Override
-    public void setOnOffStartButton(boolean status) {
-    }
+    public void changeStartButtonStatus(boolean status) {}
 
     @Override
-    public void setOnOffStopButton(boolean status) {
-    }
+    public void changeEndButtonStatus(boolean status) {}
 
     @Override
-    public void atualizaPosicaoCarros() {
-    }
+    public void changeCounter(int value) {}
 }
