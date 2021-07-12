@@ -110,5 +110,8 @@ public class Tela extends JFrame implements Observer {
     @Override
     public void changeCounter(int value) {
         this.lbCount.setText(value+"");
+        if(lbCount.getText().equals("0")){
+            this.dispose();
+        }
     }
 }
