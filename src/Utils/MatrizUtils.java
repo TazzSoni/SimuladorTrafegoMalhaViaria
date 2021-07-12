@@ -69,7 +69,7 @@ public class MatrizUtils {
         }
     }
 
-    public void changeMethodType(String file, String methodType) throws IOException {
+    public void trocaTipoMetodo(String file, String methodType) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(file));
 
         String line = br.readLine();

@@ -16,7 +16,7 @@ public class Carro extends Thread {
     private boolean saiuPista = false;
     private final TelaController telaController;
 
-    private AbstractCell cell;
+    private AbstractCell celula;
     private AbstractCell nextCell = new Semaforo(0, 0, 0);
 
     public Carro(TelaController telaController) {
@@ -38,63 +38,63 @@ public class Carro extends Thread {
                 saiuPista = true;
                 telaController.updateCarCount(this);
             } else if (nextCell.isStopCell()) {
-                verifyIntersection();
+                verificaCruzamentos();
             } else {
-                moveCar();
+                moveCarro();
             }
         }
 
-        cell.reset();
+        celula.reset();
         telaController.notifyUpdate();
     }
 
     //Verifica se cruzamento é uma região crítica.
-    private void verifyIntersection() {
-        List<AbstractCell> intersectionExits = new ArrayList<>();
-        List<List<AbstractCell>> pathToAllExits = new ArrayList<>();
-        List<AbstractCell> currentPathing = new ArrayList<>();
+    private void verificaCruzamentos() {
+        List<AbstractCell> saidaCruzamentos = new ArrayList<>();
+        List<List<AbstractCell>> caminhoTodasSaidas = new ArrayList<>();
+        List<AbstractCell> caminhoAtual = new ArrayList<>();
 
         AbstractCell cell = nextCell;
 
         // Verifica o cruzamento
         for (int i = 0; i < 4; i++) {
             int moveType = cell.getMoveType();
-            currentPathing.add(cell);
+            caminhoAtual.add(cell);
 
             switch (moveType) {
                 case 9:
-                    intersectionExits.add(telaController.getCellAtPosition(cell.getRow(), cell.getColumn() + 1));
-                    pathToAllExits.add(new ArrayList<>(currentPathing));
+                    saidaCruzamentos.add(telaController.getCellAtPosition(cell.getRow(), cell.getColumn() + 1));
+                    caminhoTodasSaidas.add(new ArrayList<>(caminhoAtual));
                     break;
                 case 10:
-                    intersectionExits.add(telaController.getCellAtPosition(cell.getRow() - 1, cell.getColumn()));
-                    pathToAllExits.add(new ArrayList<>(currentPathing));
+                    saidaCruzamentos.add(telaController.getCellAtPosition(cell.getRow() - 1, cell.getColumn()));
+                    caminhoTodasSaidas.add(new ArrayList<>(caminhoAtual));
                     break;
                 case 11:
-                    intersectionExits.add(telaController.getCellAtPosition(cell.getRow() + 1, cell.getColumn()));
-                    pathToAllExits.add(new ArrayList<>(currentPathing));
+                    saidaCruzamentos.add(telaController.getCellAtPosition(cell.getRow() + 1, cell.getColumn()));
+                    caminhoTodasSaidas.add(new ArrayList<>(caminhoAtual));
                     break;
                 case 12:
-                    intersectionExits.add(telaController.getCellAtPosition(cell.getRow(), cell.getColumn() - 1));
-                    pathToAllExits.add(new ArrayList<>(currentPathing));
+                    saidaCruzamentos.add(telaController.getCellAtPosition(cell.getRow(), cell.getColumn() - 1));
+                    caminhoTodasSaidas.add(new ArrayList<>(caminhoAtual));
                     break;
             }
             cell = getNextCell(cell);
         }
-        checkPathAndMove(pathToAllExits, intersectionExits);
+        checkPathAndMove(caminhoTodasSaidas, saidaCruzamentos);
     }
 
-    private void checkPathAndMove(List<List<AbstractCell>> pathToAllExits, List<AbstractCell> intersectionExits) {
+    private void checkPathAndMove(List<List<AbstractCell>> caminhoTodasSaidas, List<AbstractCell> saidaCruzamentos) {
         List<AbstractCell> acquiredCells = new ArrayList<>();
         boolean allCellsAcquired = false;
-        List<AbstractCell> pathToExit;
+        List<AbstractCell> caminhoSaida;
 
         do {
-            int chosenExit = new Random().nextInt(intersectionExits.size());
-            pathToExit = pathToAllExits.get(chosenExit);
-            pathToExit.add(intersectionExits.get(chosenExit));
+            int chosenExit = new Random().nextInt(saidaCruzamentos.size());
+            caminhoSaida = caminhoTodasSaidas.get(chosenExit);
+            caminhoSaida.add(saidaCruzamentos.get(chosenExit));
 
-            for (AbstractCell c : pathToExit) {
+            for (AbstractCell c : caminhoSaida) {
                 if (c.setCarToIntersection(this)) {
                     acquiredCells.add(c);
                 } else {
@@ -111,16 +111,16 @@ public class Carro extends Thread {
                 }
             }
 
-            if (pathToExit.size() == acquiredCells.size())
+            if (caminhoSaida.size() == acquiredCells.size())
                 allCellsAcquired = true;
             else
-                pathToExit.remove(intersectionExits.get(chosenExit));
+                caminhoSaida.remove(saidaCruzamentos.get(chosenExit));
         } while (!allCellsAcquired);
 
-        for (AbstractCell c : pathToExit) {
-            moveCarToIntersectionExit(c);
+        for (AbstractCell c : caminhoSaida) {
+            moveCarroSaidaIntersec(c);
 
-            if (c != pathToExit.get(pathToExit.size() - 1)) {
+            if (c != caminhoSaida.get(caminhoSaida.size() - 1)) {
                 try {
                     Thread.currentThread().sleep(speed);
                 } catch (InterruptedException e) {
@@ -131,28 +131,28 @@ public class Carro extends Thread {
     }
 
     private boolean checkLastCell() {
-        return cell.isLastCell();
+        return celula.isLastCell();
     }
 
-    private void moveCar() {
-        AbstractCell c = getNextCell(cell);
+    private void moveCarro() {
+        AbstractCell c = getNextCell(celula);
         c.setCar(this);
         this.setColumn(c.getColumn());
         this.setRow(c.getRow());
         if (!c.isLastCell())
             this.nextCell = getNextCell(c);
 
-        cell.reset();
-        cell = c;
+        celula.reset();
+        celula = c;
         refreshView();
     }
 
-    private void moveCarToIntersectionExit(AbstractCell c) {
+    private void moveCarroSaidaIntersec(AbstractCell c) {
         this.setColumn(c.getColumn());
         this.setRow(c.getRow());
         this.nextCell = getNextCell(c);
-        cell.reset();
-        cell = c;
+        celula.reset();
+        celula = c;
 
         refreshView();
     }
@@ -181,12 +181,12 @@ public class Carro extends Thread {
         return speed;
     }
 
-    public AbstractCell getCell() {
-        return cell;
+    public AbstractCell getCelula() {
+        return celula;
     }
 
-    public void setCell(AbstractCell cell) {
-        this.cell = cell;
+    public void setCelula(AbstractCell celula) {
+        this.celula = celula;
     }
 
     public void setSaiuPista(boolean saiuPista) {
@@ -196,7 +196,7 @@ public class Carro extends Thread {
     public boolean setFirstPosition(Integer row, Integer col) {
         AbstractCell cell = telaController.getCellAtPosition(row, col);
         cell.setCar(this);
-        this.setCell(cell);
+        this.setCelula(cell);
 
         setRow(row);
         setColumn(col);

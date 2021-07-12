@@ -57,7 +57,7 @@ public class TelaController {
     public void trocaTipoMetodo(String opt) {
         this.tipoMetodo = opt;
         try {
-            matrizUtils.changeMethodType(filename, tipoMetodo);
+            matrizUtils.trocaTipoMetodo(filename, tipoMetodo);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
