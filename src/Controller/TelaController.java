@@ -19,7 +19,7 @@ import Model.Estrada;
 public class TelaController {
 
     private static TelaController instance;
-    private final MatrizUtils matrixManager = MatrizUtils.getInstance();
+    private final MatrizUtils matrizUtils = MatrizUtils.getInstance();
     private List<Carro> cars = new ArrayList();
     private AbstractCell[][] cells;
     private List<Observer> observers = new ArrayList();
@@ -29,8 +29,8 @@ public class TelaController {
 
     private TelaController() {
         try {
-            this.matrixManager.print(filename);
-            this.matrixManager.loadEntradasSaidas();
+            this.matrizUtils.print(filename);
+            this.matrizUtils.loadEntradasSaidas();
         } catch (IOException var2) {
             var2.printStackTrace();
         }
@@ -46,18 +46,18 @@ public class TelaController {
         return instance;
     }
 
-    public void attach(Observer obs) {
+    public void addObserver(Observer obs) {
         this.observers.add(obs);
     }
 
-    public void detach(Observer obs) {
+    public void removeObserver(Observer obs) {
         this.observers.remove(obs);
     }
 
     public void changeThreadMethodType(String opt) {
         this.threadMethodType = opt;
         try {
-            matrixManager.changeMethodType(filename, threadMethodType);
+            matrizUtils.changeMethodType(filename, threadMethodType);
         } catch (IOException ex){
             ex.printStackTrace();
         }
@@ -88,16 +88,16 @@ public class TelaController {
         notifyEndButton(false);
     }
 
-    public MatrizUtils getMatrixManager() {
-        return this.matrixManager;
+    public MatrizUtils getMatrizUtils() {
+        return this.matrizUtils;
     }
 
     private void initRoadCells() {
-        this.cells = matrixManager.getMatriz();
+        this.cells = matrizUtils.getMatriz();
         List<Integer> stopCells = Estrada.getStopCells();
 
-        int row = this.matrixManager.getRows();
-        int col = this.matrixManager.getCols();
+        int row = this.matrizUtils.getRows();
+        int col = this.matrizUtils.getCols();
 
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < col; ++j) {
@@ -114,7 +114,7 @@ public class TelaController {
 
     private boolean setLastCell(Integer[] array) {
         for (Integer[] aValue :
-                this.matrixManager.getSaidas()) {
+                this.matrizUtils.getSaidas()) {
             if (Arrays.equals(aValue, array)) {
                 return true;
             }
@@ -140,8 +140,8 @@ public class TelaController {
     }
 
     private Integer[] getFirstCell() {
-        Collections.shuffle(this.matrixManager.getEntradas());
-        return this.matrixManager.getEntradas().get(0);
+        Collections.shuffle(this.matrizUtils.getEntradas());
+        return this.matrizUtils.getEntradas().get(0);
     }
 
     public int getCars(){
@@ -152,7 +152,7 @@ public class TelaController {
         int i = c.getRow();
         int j = c.getColumn();
 
-        int moveType = this.matrixManager.getValueAtPosition(i, j);
+        int moveType = this.matrizUtils.getValueAtPosition(i, j);
         if(moveType >= 5){
             this.cells[i][j].setIcon(new ImageIcon(TipoMovimento.convertMoveType(moveType)));
         }else {

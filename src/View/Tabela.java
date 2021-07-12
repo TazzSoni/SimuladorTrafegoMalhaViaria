@@ -16,12 +16,12 @@ public class Tabela extends JPanel implements Observer {
 
         @Override
         public int getRowCount() {
-            return telaController.getMatrixManager().getRows();
+            return telaController.getMatrizUtils().getRows();
         }
 
         @Override
         public int getColumnCount() {
-            return telaController.getMatrixManager().getCols();
+            return telaController.getMatrizUtils().getCols();
         }
 
         @Override
@@ -55,7 +55,7 @@ public class Tabela extends JPanel implements Observer {
         super();
 
         telaController = TelaController.getInstance();
-        telaController.attach(this);
+        telaController.addObserver(this);
 
         cellModel = new CellModel();
 

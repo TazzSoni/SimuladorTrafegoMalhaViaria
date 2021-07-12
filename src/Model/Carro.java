@@ -22,7 +22,6 @@ public class Carro extends Thread {
     public Carro(TelaController telaController) {
         this.telaController = telaController;
         setSpeed();
-        System.out.println("Velocidade: " + speed);
     }
 
     @Override
@@ -50,8 +49,7 @@ public class Carro extends Thread {
         telaController.notifyUpdate();
     }
 
-    //O verifica cruzamento é uma região crítica. Não pode acontecer de o carro ver o espaço vazio à sua frente,
-    // e aí perder o processador por um instante, e quando o carro for tentar se mover o espaço na verdade não está vazio.
+    //Verifica se cruzamento é uma região crítica.
     private void verifyIntersection() {
         List<AbstractCell> intersectionExits = new ArrayList<>();
         List<List<AbstractCell>> pathToAllExits = new ArrayList<>();
@@ -59,7 +57,7 @@ public class Carro extends Thread {
 
         AbstractCell cell = nextCell;
 
-        // Percorre o cruzamento
+        // Verifica o cruzamento
         for (int i = 0; i < 4; i++) {
             int moveType = cell.getMoveType();
             currentPathing.add(cell);
@@ -210,7 +208,7 @@ public class Carro extends Thread {
         return true;
     }
 
-    // M�todo para mapear os cruzamentos sem mover o carro retornando a c�lula adjacente
+    // M�todo para mapear os cruzamentos sem mover o carro retornando a c�lula adjacente
     private AbstractCell getNextCell(AbstractCell cell) {
         int moveType;
 

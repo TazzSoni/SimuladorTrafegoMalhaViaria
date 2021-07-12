@@ -13,11 +13,11 @@ import java.io.IOException;
 public class Tela extends JFrame implements Observer {
 
     private TelaController controller;
-    private CarrosUtils carsThreadController = new CarrosUtils();
+    private CarrosUtils carroUtils = new CarrosUtils();
     private Tabela tabela;
     Container menu;
     JButton btnStart;
-    JButton btnEnd;
+    JButton btnStop;
     JTextArea txtTime;
 
     JLabel lbVeiculos;
@@ -33,7 +33,7 @@ public class Tela extends JFrame implements Observer {
     public Tela() throws IOException {
 
         controller = TelaController.getInstance();
-        controller.attach(this);
+        controller.addObserver(this);
 
         this.setSize(1200, 960);
         this.setLayout(new BorderLayout());
@@ -49,17 +49,17 @@ public class Tela extends JFrame implements Observer {
             String timeOut = timer.getValue() + "";
             int cars = Integer.parseInt(value);
             int timeOutValue = Integer.parseInt(timeOut);
-            carsThreadController.setQtdCarros(cars);
-            carsThreadController.setTempo(timeOutValue);
-            carsThreadController.start();
+            carroUtils.setQtdCarros(cars);
+            carroUtils.setTempo(timeOutValue);
+            carroUtils.start();
         });
         btnStart.setEnabled(false);
 
-        btnEnd = new JButton("END");
-        btnEnd.addActionListener((ActionEvent e) -> {
+        btnStop = new JButton("STOP");
+        btnStop.addActionListener((ActionEvent e) -> {
             controller.stop();
         });
-        btnEnd.setEnabled(false);
+        btnStop.setEnabled(false);
 
         select = new JComboBox(vector);
         select.addActionListener((ActionEvent e) -> {
@@ -79,7 +79,7 @@ public class Tela extends JFrame implements Observer {
 
         //Criando menu
         menu.add(btnStart);
-        menu.add(btnEnd);
+        menu.add(btnStop);
         menu.add(select);
         menu.add(lbVeiculos);
         menu.add(numeroVeiculos);
@@ -106,7 +106,7 @@ public class Tela extends JFrame implements Observer {
 
     @Override
     public void changeEndButtonStatus(boolean status) {
-        this.btnEnd.setEnabled(status);
+        this.btnStop.setEnabled(status);
     }
 
     @Override

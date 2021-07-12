@@ -7,6 +7,7 @@ public class CarrosUtils extends Thread {
     TelaController telaController = TelaController.getInstance();
     private int qtdCarros;
     private int tempo;
+    private boolean stop = false;
 
     public void setQtdCarros(int qtdCarros) {
         this.qtdCarros = qtdCarros;
