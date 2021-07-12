@@ -23,15 +23,19 @@ public class CarrosUtils extends Thread {
 
     @Override
     public void run() {
-        for (int i = 0; i < qtdCarros; i++) {
+        while (!stop) {
+            System.out.println();
+        int ver  = telaController.getCars();
             if (telaController.isStopped()) {
                 break;
             }
-            telaController.start();
-            try {
-                Thread.currentThread().sleep(getTempo());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (qtdCarros > ver) {
+                telaController.start();
+                try {
+                    Thread.currentThread().sleep(getTempo());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

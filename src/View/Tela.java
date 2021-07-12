@@ -67,17 +67,16 @@ public class Tela extends JFrame implements Observer {
             controller.changeThreadMethodType(resultado);
         });
 
-        lbVeiculos = new JLabel("Numero de veículos: ");
+        lbVeiculos = new JLabel("Qtd de carros: ");
         numeroVeiculos = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
 
         lbTimer = new JLabel("Tempo: ");
         timer = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
 
-        lbNumCars = new JLabel("Veículos: ");
+        lbNumCars = new JLabel("Carros na pista: ");
         lbCount = new JLabel("");
         menu.setLayout(new FlowLayout());
 
-        //Criando menu
         menu.add(btnStart);
         menu.add(btnStop);
         menu.add(select);
@@ -88,7 +87,6 @@ public class Tela extends JFrame implements Observer {
         menu.add(lbNumCars);
         menu.add(lbCount);
 
-        //Criando tela
         this.add(menu, BorderLayout.NORTH);
         this.add(tabela, BorderLayout.CENTER);
 
