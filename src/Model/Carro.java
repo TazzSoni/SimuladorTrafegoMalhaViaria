@@ -13,7 +13,7 @@ public class Carro extends Thread {
     private int row;
     private int column;
     private long speed;
-    private boolean outOfRoad = false;
+    private boolean saiuPista = false;
     private final TelaController telaController;
 
     private AbstractCell cell;
@@ -28,15 +28,14 @@ public class Carro extends Thread {
     public void run() {
         super.run();
 
-        while (!outOfRoad) {
+        while (!saiuPista) {
             try {
                 Thread.currentThread().sleep(speed);
             } catch (InterruptedException e) {
                 e.getStackTrace();
             }
-
             if (checkLastCell()) {
-                outOfRoad = true;
+                saiuPista = true;
                 telaController.updateCarCount(this);
             } else if (nextCell.isStopCell()) {
                 verifyIntersection();
@@ -82,8 +81,6 @@ public class Carro extends Thread {
             }
             cell = getNextCell(cell);
         }
-
-        System.out.println(telaController.getThreadMethodType());
         checkPathAndMove(pathToAllExits, intersectionExits);
     }
 
@@ -104,9 +101,7 @@ public class Carro extends Thread {
                     for (AbstractCell acquiredCell : acquiredCells) {
                         acquiredCell.reset();
                     }
-
                     acquiredCells = new ArrayList<>();
-
                     try {
                         Thread.currentThread().sleep(speed);
                     } catch (InterruptedException e) {
@@ -194,8 +189,8 @@ public class Carro extends Thread {
         this.cell = cell;
     }
 
-    public void setOutOfRoad(boolean outOfRoad) {
-        this.outOfRoad = outOfRoad;
+    public void setSaiuPista(boolean saiuPista) {
+        this.saiuPista = saiuPista;
     }
 
     public boolean setFirstPosition(Integer row, Integer col) {
@@ -256,6 +251,6 @@ public class Carro extends Thread {
     }
 
     public void refreshView() {
-        telaController.updateRoadView(this);
+        telaController.atualizaViewPista(this);
     }
 }

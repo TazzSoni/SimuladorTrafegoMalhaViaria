@@ -7,13 +7,12 @@ public class CarrosUtils extends Thread {
     TelaController telaController = TelaController.getInstance();
     private int qtdCarros;
     private int tempo;
-    private boolean stop = false;
 
     public void setQtdCarros(int qtdCarros) {
         this.qtdCarros = qtdCarros;
     }
 
-    public void setTempo(int timer) {
+    public void setSleep(int timer) {
         this.tempo = timer;
     }
 
@@ -23,7 +22,7 @@ public class CarrosUtils extends Thread {
 
     @Override
     public void run() {
-        while (!stop) {
+        while (true) {
             System.out.println();
         int ver  = telaController.getCars();
             if (telaController.isStopped()) {

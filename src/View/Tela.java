@@ -50,7 +50,7 @@ public class Tela extends JFrame implements Observer {
             int cars = Integer.parseInt(value);
             int timeOutValue = Integer.parseInt(timeOut);
             carroUtils.setQtdCarros(cars);
-            carroUtils.setTempo(timeOutValue);
+            carroUtils.setSleep(timeOutValue);
             carroUtils.start();
         });
         btnStart.setEnabled(false);
@@ -64,13 +64,13 @@ public class Tela extends JFrame implements Observer {
         select = new JComboBox(vector);
         select.addActionListener((ActionEvent e) -> {
             String resultado = (String) select.getSelectedItem();
-            controller.changeThreadMethodType(resultado);
+            controller.trocaTipoMetodo(resultado);
         });
 
         lbVeiculos = new JLabel("Qtd de carros: ");
         numeroVeiculos = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
 
-        lbTimer = new JLabel("Tempo: ");
+        lbTimer = new JLabel("Sleep: ");
         timer = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
 
         lbNumCars = new JLabel("Carros na pista: ");

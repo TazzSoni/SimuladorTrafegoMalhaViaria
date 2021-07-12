@@ -23,7 +23,7 @@ public class TelaController {
     private List<Carro> cars = new ArrayList();
     private AbstractCell[][] cells;
     private List<Observer> observers = new ArrayList();
-    private String threadMethodType;
+    private String tipoMetodo;
     private final String filename = "malhas/malha-exemplo-3.txt";
     private boolean stopped = false;
 
@@ -35,7 +35,7 @@ public class TelaController {
             var2.printStackTrace();
         }
 
-        this.initRoadCells();
+        this.initiCelulasPista();
     }
 
     public static TelaController getInstance() {
@@ -54,18 +54,18 @@ public class TelaController {
         this.observers.remove(obs);
     }
 
-    public void changeThreadMethodType(String opt) {
-        this.threadMethodType = opt;
+    public void trocaTipoMetodo(String opt) {
+        this.tipoMetodo = opt;
         try {
-            matrizUtils.changeMethodType(filename, threadMethodType);
-        } catch (IOException ex){
+            matrizUtils.changeMethodType(filename, tipoMetodo);
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         notifyStartButton(true);
     }
 
-    public String getThreadMethodType(){
-        return threadMethodType;
+    public String getTipoMetodo() {
+        return tipoMetodo;
     }
 
     public void start() {
@@ -78,7 +78,7 @@ public class TelaController {
 
         this.cars.add(newCar);
         notifyCounter();
-        this.updateRoadView(newCar);
+        this.atualizaViewPista(newCar);
         newCar.start();
     }
 
@@ -92,7 +92,7 @@ public class TelaController {
         return this.matrizUtils;
     }
 
-    private void initRoadCells() {
+    private void initiCelulasPista() {
         this.cells = matrizUtils.getMatriz();
         List<Integer> stopCells = Estrada.getStopCells();
 
@@ -113,8 +113,8 @@ public class TelaController {
     }
 
     private boolean setLastCell(Integer[] array) {
-        for (Integer[] aValue :
-                this.matrizUtils.getSaidas()) {
+        for (Integer[] aValue
+                : this.matrizUtils.getSaidas()) {
             if (Arrays.equals(aValue, array)) {
                 return true;
             }
@@ -122,17 +122,31 @@ public class TelaController {
         return false;
     }
 
-    public void setStopped(boolean status){
+    public void setStopped(boolean status) {
         this.stopped = status;
     }
 
-    public boolean isStopped(){
+    public boolean isStopped() {
         return stopped;
     }
 
-    public void updateCarCount(Carro c){
+    public void updateCarCount(Carro c) {
         this.cars.remove(c);
         notifyCounter();
+    }
+
+    public void atualizaViewPista(Carro c) {
+        int i = c.getRow();
+        int j = c.getColumn();
+
+        int moveType = this.matrizUtils.getValueAtPosition(i, j);
+        if (moveType >= 5) {
+            this.cells[i][j].setIcon(new ImageIcon(TipoMovimento.convertMoveType(moveType)));
+        } else {
+            this.cells[i][j].setIcon(new ImageIcon(TipoMovimento.getMoveType(moveType)));
+        }
+
+        notifyUpdate();
     }
 
     public Icon renderCell(int row, int col) {
@@ -144,33 +158,19 @@ public class TelaController {
         return this.matrizUtils.getEntradas().get(0);
     }
 
-    public int getCars(){
+    public int getCars() {
         return this.cars.size();
-    }
-
-    public void updateRoadView(Carro c) {
-        int i = c.getRow();
-        int j = c.getColumn();
-
-        int moveType = this.matrizUtils.getValueAtPosition(i, j);
-        if(moveType >= 5){
-            this.cells[i][j].setIcon(new ImageIcon(TipoMovimento.convertMoveType(moveType)));
-        }else {
-            this.cells[i][j].setIcon(new ImageIcon(TipoMovimento.getMoveType(moveType)));
-        }
-
-        notifyUpdate();
-    }
-
-    public void notifyUpdate() {
-        for (Observer observer : observers) {
-            observer.updateCarPosition();
-        }
     }
 
     public void notifyStartButton(boolean status) {
         for (Observer observer : observers) {
             observer.changeStartButtonStatus(status);
+        }
+    }
+
+    public void notifyUpdate() {
+        for (Observer observer : observers) {
+            observer.updateCarPosition();
         }
     }
 
@@ -180,7 +180,7 @@ public class TelaController {
         }
     }
 
-    public void notifyCounter(){
+    public void notifyCounter() {
         for (Observer observer : observers) {
             observer.changeCounter(this.getCars());
         }
@@ -190,5 +190,3 @@ public class TelaController {
         return cells[row][col];
     }
 }
-
- 
