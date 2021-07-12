@@ -40,7 +40,7 @@ public class Tela extends JFrame implements Observer {
         this.setLocationRelativeTo(null);
         tabela = new Tabela();
 
-        //Menu components
+        //Menu
         menu = new Container();
 
         btnStart = new JButton("START");
@@ -77,7 +77,7 @@ public class Tela extends JFrame implements Observer {
         lbCount = new JLabel("");
         menu.setLayout(new FlowLayout());
 
-        //Add components to menu
+        //Criando menu
         menu.add(btnStart);
         menu.add(btnEnd);
         menu.add(select);
@@ -88,14 +88,12 @@ public class Tela extends JFrame implements Observer {
         menu.add(lbNumCars);
         menu.add(lbCount);
 
-        //Add components to frame layout
+        //Criando tela
         this.add(menu, BorderLayout.NORTH);
         this.add(tabela, BorderLayout.CENTER);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
-
-//        this.pack();
     }
 
     @Override

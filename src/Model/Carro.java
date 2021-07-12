@@ -59,7 +59,7 @@ public class Carro extends Thread {
 
         AbstractCell cell = nextCell;
 
-        // For responsável por passar pelas 4 células do cruzamento
+        // Percorre o cruzamento
         for (int i = 0; i < 4; i++) {
             int moveType = cell.getMoveType();
             currentPathing.add(cell);
@@ -210,8 +210,7 @@ public class Carro extends Thread {
         return true;
     }
 
-    // Para este método precisaremos colocar as posições nas célular. Ele retorna a próxima célula em relação a uma célula qualquer,
-    // e vai ser usado para mapearmos o cruzamento sem precisar mover o carro..
+    // M�todo para mapear os cruzamentos sem mover o carro retornando a c�lula adjacente
     private AbstractCell getNextCell(AbstractCell cell) {
         int moveType;
 
