@@ -24,11 +24,10 @@ public class CarrosUtils extends Thread {
     public void run() {
         while (true) {
             System.out.println();
-        int ver  = telaController.getCars();
             if (telaController.isStopped()) {
                 break;
             }
-            if (qtdCarros > ver) {
+            if (qtdCarros > telaController.getCars()) {
                 telaController.start();
                 try {
                     Thread.currentThread().sleep(getTempo());
