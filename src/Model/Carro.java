@@ -81,10 +81,10 @@ public class Carro extends Thread {
             }
             cell = getNextCell(cell);
         }
-        checkPathAndMove(caminhoTodasSaidas, saidaCruzamentos);
+        verificaCaminhoEMove(caminhoTodasSaidas, saidaCruzamentos);
     }
 
-    private void checkPathAndMove(List<List<AbstractCell>> caminhoTodasSaidas, List<AbstractCell> saidaCruzamentos) {
+    private void verificaCaminhoEMove(List<List<AbstractCell>> caminhoTodasSaidas, List<AbstractCell> saidaCruzamentos) {
         List<AbstractCell> acquiredCells = new ArrayList<>();
         boolean allCellsAcquired = false;
         List<AbstractCell> caminhoSaida;
