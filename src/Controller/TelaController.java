@@ -24,7 +24,7 @@ public class TelaController {
     private AbstractCell[][] cells;
     private List<Observer> observers = new ArrayList();
     private String tipoMetodo;
-    private final String filename = "malhas/malha-exemplo-3.txt";
+    private final String filename = "malhas/malha-exemplo-2.txt";
     private boolean stopped = false;
 
     private TelaController() {

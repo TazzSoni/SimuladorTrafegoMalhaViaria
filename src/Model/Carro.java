@@ -95,6 +95,7 @@ public class Carro extends Thread {
             caminhoSaida.add(saidaCruzamentos.get(chosenExit));
 
             for (AbstractCell c : caminhoSaida) {
+                //setCarToIntersection é onde é verifica se é possível setar o carro no caminho
                 if (c.setCarToIntersection(this)) {
                     acquiredCells.add(c);
                 } else {
