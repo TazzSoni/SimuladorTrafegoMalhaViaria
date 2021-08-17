@@ -3,7 +3,7 @@
 
 ---
 
-# Procurar Palavras em Arquivos com Threads
+# Simulador de Malha viária
 
 Atividade desenvolvida para a disciplina de Desenvolvimento de Sistemas Paralelos e Distribuídos do [Centro de Educação Superior do Alto Vale do Itajaí (CEAVI/UDESC)](https://www.udesc.br/ceavi)<br>
 
